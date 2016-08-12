@@ -1,6 +1,5 @@
 package com.feed.schedule;
 
-import com.feed.exception.InvalidFileException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -10,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import static com.feed.util.ConsoleUtil.printError;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
@@ -30,6 +30,17 @@ public class ScheduleTask extends TimerTask {
 
     @Override
     public void run() {
+        try {
+            executeTask();
+        } catch (Exception e) {
+            log.error("Error is occurred due {}", e.getMessage());
+            printError("Error is occurred. See error logs");
+            cancel();
+            log.error("Schedule task was canceled {}", task.getClass().getSimpleName());
+        }
+    }
+
+    private void executeTask() {
         File dir = new File(directory);
         checkDirectory(dir);
         List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
@@ -37,9 +48,12 @@ public class ScheduleTask extends TimerTask {
                 .collect(toMap(file -> file.getName().hashCode(), file -> file));
         Set<File> newFiles = findDifference(allFilesMap.keySet(), oldFiles.keySet())
                 .stream().map(allFilesMap::get).collect(toSet());
-        log.info("Existing new {} files in {} directory", files.size(), directory);
         if (!newFiles.isEmpty()) {
+            long startTime = System.currentTimeMillis();
+            log.info("Start executing {} task. Existing new files in {} directory", task.getClass().getSimpleName(), directory);
             task.accept(files);
+            long endTime = System.currentTimeMillis();
+            log.info("End executing {} task. Processing time {} ms", task.getClass().getSimpleName(), endTime - startTime);
         }
         oldFiles = allFilesMap;
     }
@@ -47,10 +61,13 @@ public class ScheduleTask extends TimerTask {
     private void checkDirectory(final File dir) {
         if (oldFiles.size() > 500000) {
             oldFiles.clear();
+            log.info("Clear old files. SIze was {}", oldFiles.size());
         }
         if (!dir.isDirectory() || !dir.exists()) {
             log.error("Dir {} is not exist. Program will be finished", dir.getAbsolutePath());
+            printError("Error is occurred. See error logs");
             cancel();
+            log.error("Schedule task was canceled {}", task.getClass().getSimpleName());
         }
     }
 

@@ -3,7 +3,7 @@
 
     <property name="DEV_HOME" value="c:/logs" />
 
-    <appender name="FILE-MAIN"
+    <appender name="FILE-AUDIT"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${DEV_HOME}/feed.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -31,36 +31,7 @@
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-    </appender>
 
-    <appender name="FILE-FRAMEWORKS"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${DEV_HOME}/frameworks.log</file>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>DEBUG</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
-            </Pattern>
-        </encoder>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- rollover daily -->
-            <fileNamePattern>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log
-            </fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
     </appender>
 
     <appender name="FILE-ERROR"
@@ -84,26 +55,14 @@
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
+
     </appender>
-
-    <!--<logger name="org.springframework" level="INFO">-->
-        <!--<appender-ref ref="FILE-FRAMEWORKS" />-->
-    <!--</logger>-->
-
-    <!--<logger name="org.hibernate" level="INFO">-->
-        <!--<appender-ref ref="FILE-FRAMEWORKS" />-->
-    <!--</logger>-->
-
-    <!--<logger name="com.feed" level="INFO">-->
-        <!--<appender-ref ref="FILE-MAIN" />-->
-    <!--</logger>-->
 
     <root level="ERROR">
         <appender-ref ref="FILE-ERROR" />
     </root>
-
     <root level="INFO">
-        <appender-ref ref="FILE-MAIN" />
+        <appender-ref ref="FILE-AUDIT" />
     </root>
 
 </configuration>

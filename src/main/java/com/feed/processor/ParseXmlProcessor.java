@@ -3,6 +3,7 @@ package com.feed.processor;
 import com.feed.model.EntryModel;
 import com.feed.model.TransferEntry;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -12,6 +13,7 @@ import java.io.File;
 /**
  * Created by Vadym_Vlasenko on 09.08.2016.
  */
+@Component(value = "parseXMLProcessor")
 @Slf4j
 public class ParseXmlProcessor implements Processor {
 
@@ -28,7 +30,7 @@ public class ParseXmlProcessor implements Processor {
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             transferEntry.getIncomingEntries().add((EntryModel) unmarshaller.unmarshal(file));
         } catch (JAXBException e) {
-            log.error("File {} cannot be parse or is not valid", file.getName());
+            log.error("File {} cannot be parse or is not valid in {}", file.getName(), getName());
             transferEntry.getErrorFileList().add(file);
         }
     }

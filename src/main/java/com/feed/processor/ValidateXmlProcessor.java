@@ -3,6 +3,7 @@ package com.feed.processor;
 import com.feed.model.TransferEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -13,15 +14,18 @@ import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
 
+import static javax.xml.XMLConstants.*;
 import static org.apache.commons.io.FilenameUtils.*;
 
 /**
  * Created by Vadym_Vlasenko on 09.08.2016.
  */
+@Component(value = "validationProcessor")
 @Slf4j
 public class ValidateXmlProcessor implements Processor {
 
     public static final String XML = "xml";
+    public static final String ENTRY_XSD_PATH = "src/main/resources/entry.xsd";
 
     @Override
     public void process(TransferEntry transferEntry) {
@@ -36,14 +40,13 @@ public class ValidateXmlProcessor implements Processor {
 
     private boolean validateXml(File file) {
         try {
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new File("src/main/resources/entry.xsd"));
+            SchemaFactory factory = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new File(ENTRY_XSD_PATH));
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(file));
-            System.out.println("valid file " + file.getName());
             return true;
         } catch (IOException | SAXException e) {
-            log.error("File {} is invalid due {}", file.getName(), e.getMessage());
+            log.info("File {} is invalid by XSD schema due: {}", file.getName(), e.getMessage());
             return false;
         }
     }

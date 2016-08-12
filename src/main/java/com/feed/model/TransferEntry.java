@@ -21,7 +21,7 @@ public class TransferEntry {
     private List<File> errorFileList;
     private List<File> processedFileList;
     private List<EntryModel> incomingEntries;
-    private GlobalConfig config;
+    private final GlobalConfig config;
 
     public TransferEntry(GlobalConfig config) {
         incomingFileList = new ArrayList<>();
