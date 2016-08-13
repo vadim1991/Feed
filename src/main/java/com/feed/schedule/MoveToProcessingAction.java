@@ -6,6 +6,8 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 
+import static com.feed.util.OwnFileUtils.*;
+
 /**
  * Created by Vadym_Vlasenko on 10.08.2016.
  */
@@ -22,6 +24,6 @@ public class MoveToProcessingAction extends RecursiveAction {
     @Override
     protected void compute() {
         File dir = new File(directory);
-        OwnFileUtils.renameAndMove(files, dir);
+        renameAndMove(files, dir);
     }
 }

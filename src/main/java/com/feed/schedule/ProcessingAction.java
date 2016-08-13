@@ -38,8 +38,8 @@ public class ProcessingAction extends RecursiveAction {
         try {
             strategy.runProcess(transferEntry);
         } catch (Exception e) {
-            log.error("Fatal error due {}", e.getCause());
-            printError("Fatal error, shutdown program and see error logs.");
+            log.error("Error is occurred {} due {}", e.getMessage(), e.getCause());
+            printError("Error is occurred, shutdown program and see error logs.");
             moveFiles(transferEntry.getErrorFileList(), transferEntry.getConfig().getErrorPath());
         }
     }

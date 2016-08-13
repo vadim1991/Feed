@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Scanner;
+import java.util.Set;
 
 public class ConsoleUtil {
 
@@ -31,21 +32,22 @@ public class ConsoleUtil {
                 printError("Time period is not correct");
             }
         }
-        return 1l;
+        return 1;
     }
 
-    public static String enterDirectory(String message) {
+    public static String enterDirectory(String message, Set<String> folders) {
         print(message);
-        String result = null;
+        String folder = null;
         while (scanner.hasNext()) {
-            result = scanner.nextLine();
-            if (validateDirectory(result)) {
-                return result;
+            folder = scanner.nextLine();
+            if (validateDirectory(folder) && !folders.contains(folder)) {
+                folders.add(folder);
+                return folder;
             } else {
                 printError("Directory is incorrect or doesn't exist");
             }
         }
-        return result;
+        return folder;
     }
 
     private static long checkPeriod(String periodValue) {

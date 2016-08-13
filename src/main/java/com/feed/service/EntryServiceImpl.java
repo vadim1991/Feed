@@ -4,6 +4,8 @@ import com.feed.entity.Entry;
 import com.feed.repository.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
  * Created by Vadym_Vlasenko on 12.08.2016.
  */
 @Service
+@EnableTransactionManagement
+@Transactional
 public class EntryServiceImpl implements EntryService {
 
     @Autowired
@@ -25,7 +29,7 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public void batchSave(List<Entry> entries) {
-        if (CollectionUtils.isEmpty(entries)) {
+        if (!CollectionUtils.isEmpty(entries)) {
             entries.stream().forEach(this::save);
         }
     }

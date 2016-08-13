@@ -1,22 +1,20 @@
 package com.feed;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 
-import java.io.InputStream;
-
-@Slf4j
+@Configuration
+@SpringBootApplication
+@ImportResource("classpath:spring-config.xml")
 public class Main {
 
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("/spring-config.xml");
-        ConsoleLauncher consoleLauncher = applicationContext.getBean(ConsoleLauncher.class);
-        try {
-            consoleLauncher.start();
-        } catch (Exception e) {
-            log.error("Error due: {}", e.getMessage());
-        }
+        ConfigurableApplicationContext run = SpringApplication.run(Main.class, args);
+        ConsoleLauncher consoleLauncher = run.getBean(ConsoleLauncher.class);
+        consoleLauncher.start();
     }
 
 }

@@ -9,11 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.concurrent.ForkJoinPool;
 
-import static com.feed.util.ConsoleUtil.enterDirectory;
-import static com.feed.util.ConsoleUtil.enterSchedulePeriod;
+import static com.feed.util.ConsoleUtil.*;
 
 @Component
 @Slf4j
@@ -25,18 +26,7 @@ public class ConsoleLauncher {
     public void start() {
         log.info("Application is started...");
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        String incomingDir = enterDirectory("Enter directory for incoming files:");
-        String processingDir = enterDirectory("Enter directory for temporary processing files:");
-        String errorDir = enterDirectory("Enter error directory for files:");
-        String processedDir = enterDirectory("Enter directory for processed files:");
-        long period = enterSchedulePeriod("Enter schedule period in sec:");
-        GlobalConfig globalConfig = GlobalConfig.builder()
-                .incomingPath(incomingDir)
-                .errorPath(errorDir)
-                .processedPath(processedDir)
-                .processingPath(processingDir)
-                .schedulePeriod(period * 1000)
-                .build();
+        GlobalConfig globalConfig = fillGlobalConfig();
         log.info("Configurations: {}", globalConfig);
         Timer timer = new Timer();
         ScheduleTask moveToIncomingTask = new ScheduleTask(globalConfig.getIncomingPath(),
@@ -44,19 +34,27 @@ public class ConsoleLauncher {
 
         ScheduleTask processingTask = new ScheduleTask(globalConfig.getProcessingPath(),
                 files -> forkJoinPool.invoke(new ProcessingAction(strategy, files, globalConfig)));
+
         timer.scheduleAtFixedRate(moveToIncomingTask, 0, globalConfig.getSchedulePeriod());
         timer.scheduleAtFixedRate(processingTask, 0, globalConfig.getSchedulePeriod());
         log.info("Timers are started...");
+        print("Application is started...");
     }
 
-//    public static GlobalConfig getGlobalConfig() {
-//        return GlobalConfig.builder()
-//                .incomingPath("e:\\TemporaryProjects\\feeds\\in")
-//                .errorPath("e:\\TemporaryProjects\\feeds\\error")
-//                .processedPath("e:\\TemporaryProjects\\feeds\\processed")
-//                .processingPath("e:\\TemporaryProjects\\feeds\\processing")
-//                .schedulePeriod(1000)
-//                .build();
-//    }
+    private GlobalConfig fillGlobalConfig() {
+        Set<String> folders = new HashSet<>();
+        String incomingDir = enterDirectory("Enter directory for incoming files:", folders);
+        String processingDir = enterDirectory("Enter directory for temporary processing files:", folders);
+        String errorDir = enterDirectory("Enter error directory for files:", folders);
+        String processedDir = enterDirectory("Enter directory for processed files:", folders);
+        long period = enterSchedulePeriod("Enter schedule period in sec:");
+        return GlobalConfig.builder()
+                .incomingPath(incomingDir)
+                .errorPath(errorDir)
+                .processedPath(processedDir)
+                .processingPath(processingDir)
+                .schedulePeriod(period * 1000)
+                .build();
+    }
 
 }

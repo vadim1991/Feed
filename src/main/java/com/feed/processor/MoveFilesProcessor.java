@@ -19,6 +19,10 @@ public class MoveFilesProcessor implements Processor {
         GlobalConfig config = transferEntry.getConfig();
         moveFiles(transferEntry.getErrorFileList(), config.getErrorPath());
         moveFiles(transferEntry.getProcessedFileList(), config.getProcessedPath());
+        log.info("For this iteration: all files - {}, bad files - {}, saved - {}",
+                transferEntry.getIncomingFileList().size(),
+                transferEntry.getErrorFileList().size(),
+                transferEntry.getProcessedFileList().size());
     }
 
 }

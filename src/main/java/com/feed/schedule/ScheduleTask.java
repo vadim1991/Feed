@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toSet;
 @Slf4j
 public class ScheduleTask extends TimerTask {
 
-    private String directory;
+    private final String directory;
     private final Consumer<List<File>> task;
     private Map<Integer, File> oldFiles = new ConcurrentHashMap<>();
 
@@ -36,7 +36,7 @@ public class ScheduleTask extends TimerTask {
             log.error("Error is occurred due {}", e.getMessage());
             printError("Error is occurred. See error logs");
             cancel();
-            log.error("Schedule task was canceled {}", task.getClass().getSimpleName());
+            log.error("Schedule task was canceled");
         }
     }
 
@@ -50,10 +50,11 @@ public class ScheduleTask extends TimerTask {
                 .stream().map(allFilesMap::get).collect(toSet());
         if (!newFiles.isEmpty()) {
             long startTime = System.currentTimeMillis();
-            log.info("Start executing {} task. Existing new files in {} directory", task.getClass().getSimpleName(), directory);
+            log.info("Start executing task. Existing new files in {} directory", directory);
             task.accept(files);
-            long endTime = System.currentTimeMillis();
-            log.info("End executing {} task. Processing time {} ms", task.getClass().getSimpleName(), endTime - startTime);
+            log.info("End executing task in {} directory. Processing time {} ms",
+                    directory,
+                    System.currentTimeMillis() - startTime);
         }
         oldFiles = allFilesMap;
     }
@@ -61,13 +62,13 @@ public class ScheduleTask extends TimerTask {
     private void checkDirectory(final File dir) {
         if (oldFiles.size() > 500000) {
             oldFiles.clear();
-            log.info("Clear old files. SIze was {}", oldFiles.size());
+            log.info("Clear old files. Size was {}", oldFiles.size());
         }
         if (!dir.isDirectory() || !dir.exists()) {
-            log.error("Dir {} is not exist. Program will be finished", dir.getAbsolutePath());
-            printError("Error is occurred. See error logs");
+            log.error("Dir {} is not exist", dir.getAbsolutePath());
+            printError("Error is occurred. Directory is not exist. See error logs");
             cancel();
-            log.error("Schedule task was canceled {}", task.getClass().getSimpleName());
+            log.error("Schedule task was canceled {}");
         }
     }
 

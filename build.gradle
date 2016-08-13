@@ -1,37 +1,47 @@
 apply plugin: 'java'
 apply plugin: 'java-library-distribution'
+apply plugin: 'spring-boot'
 
 version = '1.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+mainClassName = "com.feed.Main"
 
 repositories {
     jcenter()
 }
 
-task packageToJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Gradle Jar File Example',
-                'Implementation-Version': version,
-                'Main-Class': 'com.feed.Main'
+jar {
+    baseName = 'feed-import'
+    version =  '0.1.0'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
     }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE")
+    }
 }
 
 dependencies {
+    compile "org.springframework.boot:spring-boot:1.4.0.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter:1.4.0.RELEASE"
+    compile "org.springframework.boot:spring-boot-autoconfigure:1.4.0.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:1.4.0.RELEASE"
     compile "org.springframework:spring-core:4.3.2.RELEASE"
     compile "org.springframework:spring-context:4.3.2.RELEASE"
     compile "org.springframework.data:spring-data-jpa:1.10.2.RELEASE"
     compile "org.springframework:spring-tx:4.3.2.RELEASE"
+    compile "org.hibernate:hibernate-core:4.1.6.Final"
+    compile 'org.hibernate:hibernate-entitymanager:4.1.6.Final'
+
     compile "org.projectlombok:lombok:1.16.10"
-    compile "commons-io:commons-io:2.5"
     compile "javax.xml.bind:jaxb-api:2.2.12"
+    compile "commons-io:commons-io:2.5"
     compile "org.apache.commons:commons-lang3:3.4"
     compile 'org.postgresql:postgresql:9.4-1201-jdbc4'
-    compile "org.hibernate:hibernate-core:5.2.2.Final"
-    compile 'org.hibernate:hibernate-entitymanager:4.2.15.Final'
     compile 'commons-dbcp:commons-dbcp:1.4'
     compile 'org.slf4j:jcl-over-slf4j:1.7.12'
     compile 'ch.qos.logback:logback-classic:1.1.3'

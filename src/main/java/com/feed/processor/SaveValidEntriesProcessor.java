@@ -36,6 +36,7 @@ public class SaveValidEntriesProcessor implements Processor {
         try {
             entryService.batchSave(entries);
             transferEntry.getProcessedFileList().addAll(transferEntry.getValidFileList());
+            log.info("{} entries were saved to DB", entries.size());
         } catch (Exception e) {
             log.error("Error is occurred in {} due: {}", getName(), e.getMessage());
             printError("Error is occurred during saving to DB. See error logs");
