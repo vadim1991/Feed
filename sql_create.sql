@@ -5,3 +5,8 @@ CREATE TABLE entry
   creation_date timestamp without time zone,
   CONSTRAINT entry_pkey PRIMARY KEY (id)
 )
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE entry
+  OWNER TO postgres;

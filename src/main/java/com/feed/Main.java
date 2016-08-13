@@ -1,14 +1,16 @@
 package com.feed;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 
 @Configuration
 @SpringBootApplication
-@ImportResource("classpath:spring-config.xml")
+@ComponentScan(basePackages = {"com.feed"})
+@EnableAutoConfiguration
 public class Main {
 
     public static void main(String[] args) {
