@@ -3,16 +3,14 @@ package com.feed.schedule;
 import com.feed.model.GlobalConfig;
 import com.feed.model.TransferEntry;
 import com.feed.processor.Strategy;
-import com.feed.util.ConsoleUtil;
-import com.feed.util.OwnFileUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 
-import static com.feed.util.ConsoleUtil.*;
-import static com.feed.util.OwnFileUtils.*;
+import static com.feed.util.ConsoleUtil.printError;
+import static com.feed.util.OwnFileUtils.moveFiles;
 
 /**
  * Created by Vadym_Vlasenko on 11.08.2016.

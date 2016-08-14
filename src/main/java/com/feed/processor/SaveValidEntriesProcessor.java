@@ -5,7 +5,6 @@ import com.feed.model.EntryModel;
 import com.feed.model.TransferEntry;
 import com.feed.service.EntryService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

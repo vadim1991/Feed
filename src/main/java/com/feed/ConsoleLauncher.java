@@ -24,6 +24,7 @@ public class ConsoleLauncher {
     private Strategy strategy;
 
     public void start() {
+        print("Hello, this is feed import application");
         log.info("Application is started...");
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         GlobalConfig globalConfig = fillGlobalConfig();

@@ -1,12 +1,10 @@
 package com.feed.schedule;
 
-import com.feed.util.OwnFileUtils;
-
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 
-import static com.feed.util.OwnFileUtils.*;
+import static com.feed.util.OwnFileUtils.renameAndMove;
 
 /**
  * Created by Vadym_Vlasenko on 10.08.2016.

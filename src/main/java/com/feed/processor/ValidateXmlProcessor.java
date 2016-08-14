@@ -48,7 +48,7 @@ public class ValidateXmlProcessor implements Processor {
     }
 
     private boolean validateXml(File file) {
-        try(InputStream inputStream = new FileInputStream(file)) {
+        try (InputStream inputStream = new FileInputStream(file)) {
             validator.validate(new StreamSource(inputStream));
             return true;
         } catch (IOException | SAXException e) {

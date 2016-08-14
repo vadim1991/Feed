@@ -29,12 +29,12 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class ProcessorTest {
 
-    private TransferEntry transferEntry;
     private final File validFile = new File(getClass().getResource("/entry.xml").getFile());
     private final File invalidFile = new File(getClass().getResource("/logback.xml").getFile());
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final EntryModel entryModel = new EntryModel("Содержимое записи", dateFormat.parse("2014-01-01 00:00:00"));
 
+    private TransferEntry transferEntry;
     @Autowired
     @Qualifier("validationProcessor")
     private Processor validateXmlProcessor;
